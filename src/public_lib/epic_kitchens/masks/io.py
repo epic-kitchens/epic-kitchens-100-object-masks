@@ -6,6 +6,7 @@ from epic_kitchens.masks.types import FrameObjectDetections
 
 
 def load_detections(filepath: Union[Path, str]) -> List[FrameObjectDetections]:
+    filepath = Path(filepath)
     video_id = filepath.stem
     with open(filepath, "rb") as f:
         return [

@@ -23,8 +23,6 @@ parser.add_argument(
     type=Path,
     help="Path to pickle containing list of releasable mask detections",
 )
-parser.add_argument("--width", type=int, default=456)
-parser.add_argument("--height", type=int, default=256)
 
 
 def get_frame_number(frame_filename: str) -> int:
@@ -32,7 +30,7 @@ def get_frame_number(frame_filename: str) -> int:
 
 
 class Converter:
-    def __init__(self, height: int, width: int):
+    def __init__(self, height: int = 1, width: int = 1):
         self.height = height
         self.width = width
 
@@ -75,10 +73,10 @@ class Converter:
             pred_class=cls,
             mask=coco_mask_decode(mask),
             bbox=BBox(
-                top_left_x=bbox[0] / self.width,
-                top_left_y=bbox[1] / self.height,
-                bottom_right_x=bbox[2] / self.width,
-                bottom_right_y=bbox[3] / self.height,
+                top_left_x=bbox[1] / self.width,
+                top_left_y=bbox[0] / self.height,
+                bottom_right_x=bbox[3] / self.width,
+                bottom_right_y=bbox[2] / self.height,
             ),
         )
 
@@ -86,7 +84,7 @@ class Converter:
 def main(args):
     raw_masks: Dict[str, Dict[str, Any]] = pd.read_pickle(args.raw_masks_pkl)
     video_id = args.raw_masks_pkl.stem
-    converter = Converter(height=args.height, width=args.width)
+    converter = Converter()
     releasable_masks = converter.convert_video_detections(video_id, raw_masks)
     save_detections(args.releasable_masks_pkl, releasable_masks)
 
