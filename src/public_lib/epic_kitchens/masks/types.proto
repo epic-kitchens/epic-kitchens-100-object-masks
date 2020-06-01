@@ -15,6 +15,7 @@ message ObjectDetection {
   int32 pred_class = 4;
 }
 
-message FrameMasks {
-  repeated ObjectDetection objects = 1;
+message FrameObjectDetections {
+    int32 frame_number = 2;
+    repeated ObjectDetection objects = 3;
 }
