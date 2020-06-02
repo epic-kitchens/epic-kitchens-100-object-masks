@@ -3,7 +3,6 @@ from typing import List
 import numpy as np
 from dataclasses import dataclass
 from pycocotools.mask import decode as coco_mask_decode
-from pycocotools.mask import encode as coco_mask_encode
 
 from . import types_pb2 as pb
 
@@ -39,27 +38,35 @@ class BBox:
 @dataclass
 class ObjectDetection:
     bbox: BBox
-    mask: np.ndarray
     score: float
     pred_class: int
+
+    _coco_mask_counts: bytes
 
     @staticmethod
     def from_protobuf(detection: pb.ObjectDetection) -> "ObjectDetection":
         return ObjectDetection(
             bbox=BBox.from_protobuf(detection.bbox),
-            mask=coco_mask_decode({"counts": detection.coco_mask, "size": [100, 100]}),
             score=detection.score,
             pred_class=detection.pred_class,
+            _coco_mask_counts=detection.coco_mask,
         )
 
     def to_protobuf(self) -> pb.ObjectDetection:
         detection = pb.ObjectDetection()
         detection.bbox.MergeFrom(self.bbox.to_protobuf())
-        detection.coco_mask = coco_mask_encode(self.mask)["counts"]
+        detection.coco_mask = self._coco_mask_counts
         detection.score = self.score
         detection.pred_class = self.pred_class
         assert detection.IsInitialized()
         return detection
+
+    @property
+    def mask(self) -> np.ndarray:
+        return coco_mask_decode({
+            'counts': self._coco_mask_counts,
+            'size': [100, 100]
+        })
 
 
 @dataclass

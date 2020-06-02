@@ -5,6 +5,7 @@ from numpy.testing import assert_almost_equal, assert_array_equal
 
 from epic_kitchens.masks.types import FrameObjectDetections, ObjectDetection, BBox
 from epic_kitchens.masks.io import load_detections, save_detections
+from pycocotools.mask import encode as coco_mask_encode
 
 
 def gen_mask():
@@ -34,7 +35,7 @@ def test_serialisation_round_trip_is_idempotent(tmpdir):
                     bottom_right_x=0.3,
                     bottom_right_y=0.4,
                 ),
-                mask=gen_mask(),
+                _coco_mask_counts=coco_mask_encode(gen_mask())['counts'],
                 pred_class=42,
                 score=0.8,
             )

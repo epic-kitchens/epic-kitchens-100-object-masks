@@ -71,7 +71,7 @@ class Converter:
         return ObjectDetection(
             score=score,
             pred_class=cls,
-            mask=coco_mask_decode(mask),
+            _coco_mask_counts=mask['counts'],
             bbox=BBox(
                 top_left_x=bbox[1] / self.width,
                 top_left_y=bbox[0] / self.height,
