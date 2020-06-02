@@ -75,7 +75,7 @@ class DetectionRenderer:
                 bboxes.append(resize_bbox(obj.bbox, img.height, img.width))
                 scores.append(obj.score)
 
-        if len(masks) > 1:
+        if len(masks) > 0:
             np_masks = np.stack(masks, axis=-1)
         else:
             np_masks = np.zeros((img.height, img.width, 0), dtype=np.uint8)
