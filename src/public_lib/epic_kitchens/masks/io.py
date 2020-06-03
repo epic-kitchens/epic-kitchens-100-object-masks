@@ -1,18 +1,18 @@
 import pickle
 from pathlib import Path
-from typing import List, Union
+from typing import Iterator, List, Union
 
 from epic_kitchens.masks.types import FrameObjectDetections
 
 
-def load_detections(filepath: Union[Path, str]) -> List[FrameObjectDetections]:
+def load_detections(filepath: Union[Path, str]) -> Iterator[FrameObjectDetections]:
     filepath = Path(filepath)
     video_id = filepath.stem
     with open(filepath, "rb") as f:
-        return [
+        return (
             FrameObjectDetections.from_protobuf_str(video_id, pb_str) for pb_str in
             pickle.load(f)
-        ]
+        )
 
 
 def save_detections(

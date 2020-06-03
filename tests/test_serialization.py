@@ -42,7 +42,7 @@ def test_serialisation_round_trip_is_idempotent(tmpdir):
         ],
     )
     save_detections(tmpfile, [detections])
-    loaded_detections = load_detections(tmpfile)[0]
+    loaded_detections = next(load_detections(tmpfile))
 
     assert loaded_detections.video_id == detections.video_id
     assert loaded_detections.frame_number == detections.frame_number

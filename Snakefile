@@ -1,6 +1,7 @@
 import re
 from pathlib import Path
 from typing import Dict, Iterator, List, Union
+import pandas as pd
 
 RAW_DETECTION_ROOT = '/media/viki/SCRATCH/epic2020_aggregated_masks'
 DATA_PROCESSED = 'data/processed'
@@ -23,6 +24,13 @@ videos: List[str] = [
     for video_dir in iter_video_dirs(RAW_DETECTION_ROOT)
 ]
 
+video_lengths = pd.read_csv('EPIC_100_frame_counts.csv', index_col='video_id')['rgb_n_frames']
+
+def get_n_frames_for_video(video_id: str) -> int:
+    return video_lengths.loc[video_id]
+
+
+
 def extract_ids(video_name: str) -> Dict[str, str]:
     matches = re.match(r'P(\d+)_(\d+)', video_name)
     return {
@@ -42,3 +50,20 @@ rule convert_raw_detections_to_releasable_detections:
          """
          python src/scripts/convert_raw_masks_to_releasable.py {input} {output}
          """
+
+
+rule check_video_detections:
+    input: DATA_PROCESSED + '/{person_id}/{video_id}.pkl'
+    output: DATA_PROCESSED + '/{person_id}/.{video_id}.check'
+    params:
+        n_frames=lambda wildcards: get_n_frames_for_video(wildcards.video_id)
+    shell:
+         """
+         python src/scripts/check_data.py {input} --n-frames {params.n_frames} && touch {output}
+         """
+
+
+rule checks:
+    input: [f'{DATA_PROCESSED}/{ids["person"]}/.{ids["video"]}.check' \
+            for ids in map(extract_ids, videos)]
+

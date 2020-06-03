@@ -1,5 +1,8 @@
+from typing import Iterator
+
+from epic_kitchens.masks.types import BBox, FrameObjectDetections, ObjectDetection
 from epic_kitchens.masks.io import load_detections
-import os
+from epic_kitchens.masks.coco import class_names
 import numpy as np
 import argparse
 from pathlib import Path
@@ -9,11 +12,9 @@ parser = argparse.ArgumentParser(
     description="Sanity check masks",
     formatter_class=argparse.ArgumentDefaultsHelpFormatter,
 )
+parser.add_argument("detections_pkl", type=Path, help="Path to masks pkl.")
 parser.add_argument(
-    "--detections_pkls", type=Path, help="Path to masks pkl."
-)
-parser.add_argument(
-    "--frames", type=Path, help="Path to rgb frames."
+    "-n", "--n-frames", type=int, help="Expected number of frames in video."
 )
 
 
@@ -21,17 +22,20 @@ class DetectionChecker:
     def __init__(self, n_frames):
         self.n_frames = n_frames
 
-    def check(self, video_detections) -> None:
-        if self.n_frames is not None:
-            if len(video_detections) != self.n_frames:
-                raise ValueError(
-                    f"Expected video_detections to contain {self.n_frames}"
-                    f"detections, but contained {len(video_detections)}."
-                )
+    def check(self, video_detections: Iterator[FrameObjectDetections]) -> None:
+        n_detections = 0
         for frame_detections in video_detections:
+            n_detections += 1
             self.check_frame_detections(frame_detections)
 
-    def check_frame_detections(self, frame_detections) -> None:
+        if self.n_frames is not None:
+            if n_detections != self.n_frames:
+                raise ValueError(
+                        f"Expected video_detections to contain {self.n_frames}"
+                        f"detections, but contained {n_detections}."
+                )
+
+    def check_frame_detections(self, frame_detections: FrameObjectDetections) -> None:
         if self.n_frames is not None:
             if not (1 <= frame_detections.frame_number <= self.n_frames):
                 raise ValueError(
@@ -42,19 +46,26 @@ class DetectionChecker:
         for obj in frame_detections.objects:
             self.check_object_detection(obj)
 
-
-    def check_object_detection(self, object_detection) -> None:
+    def check_object_detection(self, object_detection: ObjectDetection) -> None:
         self.check_bbox(object_detection.bbox)
         self.check_score(object_detection.score)
         self.check_masks(object_detection.mask)
-        self.check_predicted_id(object_detection.pred_class)
+        self.check_class_id(object_detection.pred_class)
 
-
-    def check_score(self, score) -> None:
+    def check_score(self, score: float) -> None:
         if not (0 <= score <= 1):
             raise ValueError(f"Expected score to be between 0--1 but was {score}")
 
-    def check_bbox(self, bbox) -> None:
+    def check_bbox(self, bbox: BBox) -> None:
+        for coord in [
+            "top_left_x",
+            "top_left_y",
+            "bottom_right_x",
+            "bottom_right_y",
+        ]:
+            value = getattr(bbox, coord)
+            if not (0 <= value <= 1):
+                raise ValueError(f"Expected bbox {coord} ({value}) to be between 0--1.")
         if not (bbox.top_left_x <= bbox.bottom_right_x):
             raise ValueError(
                 f"Expected bbox top_left_x ({bbox.top_left_x}) to be "
@@ -67,38 +78,27 @@ class DetectionChecker:
                 f"less than or equal to bottom_right_y ({bbox.bottom_right_y}"
             )
 
-    def check_masks(self, mask) -> None:
+    def check_masks(self, mask: np.ndarray) -> None:
         if not isinstance(mask, np.ndarray):
             raise ValueError(
-                f"Expected hand state to be an instance of Numpy but "
-                f"was {mask.state}"
+                f"Expected mask to be an instance of np.ndarray but was {type(mask)}"
             )
+        if not mask.dtype == np.uint8:
+            raise ValueError(f"Expected mask to be of type uint8 but was {mask.dtype}")
 
-    def check_predicted_id(self, pre_id) -> None:
-        if not (0 <= pre_id <= 80):
+    def check_class_id(self, class_id: int) -> None:
+        if not (0 <= class_id < len(class_names)):
             raise ValueError(
-                f"Expected predicted class to be between 0--81 but was {pre_id}"
+                f"Expected class id to be between 0--{len(class_names) - 1} but was"
+                f" {class_id}"
             )
 
 
 def main(args):
-    pids = sorted(os.listdir(args.detections_pkls))
-    for pid in pids:
-        pid_path = os.path.join(args.detections_pkls, pid)
-        vids = sorted(os.listdir(pid_path))
-        for vid in vids:
-            print(vid)
-            vid_path = os.path.join(pid_path, vid)
-            frame_path = os.path.join(args.frames, pid, vid.split('.')[0])
-            n_frames = len(os.listdir(frame_path))
-            MasksInfo = load_detections(vid_path)
-            checker = DetectionChecker(n_frames)
-            checker.check(MasksInfo)
+    detections: Iterator[FrameObjectDetections] = load_detections(args.detections_pkl)
+    checker = DetectionChecker(args.n_frames)
+    checker.check(detections)
 
 
 if __name__ == "__main__":
     main(parser.parse_args())
-
-
-
-
