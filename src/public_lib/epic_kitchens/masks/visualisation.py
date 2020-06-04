@@ -30,10 +30,10 @@ def resize_mask(
 
 def resize_bbox(bbox: BBox, height: int, width: int) -> Tuple[int, int, int, int]:
     return (
-        round(bbox.top_left_x * width),
-        round(bbox.top_left_y * height),
-        round(bbox.bottom_right_x * width),
-        round(bbox.bottom_right_y * height),
+        round(bbox.left * width),
+        round(bbox.top * height),
+        round(bbox.right * width),
+        round(bbox.bottom * height),
     )
 
 

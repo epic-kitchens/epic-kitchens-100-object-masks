@@ -73,10 +73,10 @@ class Converter:
             pred_class=cls,
             _coco_mask_counts=mask['counts'],
             bbox=BBox(
-                top_left_x=bbox[1] / self.width,
-                top_left_y=bbox[0] / self.height,
-                bottom_right_x=bbox[3] / self.width,
-                bottom_right_y=bbox[2] / self.height,
+                left=bbox[1] / self.width,
+                top=bbox[0] / self.height,
+                right=bbox[3] / self.width,
+                bottom=bbox[2] / self.height,
             ),
         )
 

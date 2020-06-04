@@ -15,10 +15,10 @@ def gen_mask():
 
 
 def assert_bbox_close(expected_bbox: BBox, actual_bbox: BBox):
-    assert_almost_equal(actual_bbox.top_left_x, expected_bbox.top_left_x)
-    assert_almost_equal(actual_bbox.top_left_y, expected_bbox.top_left_y)
-    assert_almost_equal(actual_bbox.bottom_right_x, expected_bbox.bottom_right_x)
-    assert_almost_equal(actual_bbox.bottom_right_y, expected_bbox.bottom_right_y)
+    assert_almost_equal(actual_bbox.left, expected_bbox.left)
+    assert_almost_equal(actual_bbox.top, expected_bbox.top)
+    assert_almost_equal(actual_bbox.right, expected_bbox.right)
+    assert_almost_equal(actual_bbox.bottom, expected_bbox.bottom)
 
 
 def test_serialisation_round_trip_is_idempotent(tmpdir):
@@ -30,10 +30,10 @@ def test_serialisation_round_trip_is_idempotent(tmpdir):
         objects=[
             ObjectDetection(
                 bbox=BBox(
-                    top_left_x=0.1,
-                    top_left_y=0.2,
-                    bottom_right_x=0.3,
-                    bottom_right_y=0.4,
+                    left=0.1,
+                    top=0.2,
+                    right=0.3,
+                    bottom=0.4,
                 ),
                 _coco_mask_counts=coco_mask_encode(gen_mask())['counts'],
                 pred_class=42,

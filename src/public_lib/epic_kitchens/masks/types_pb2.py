@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x0btypes.proto\x12\x0bmodel.masks\"^\n\x04\x42\x42ox\x12\x12\n\ntop_left_x\x18\x01 \x01(\x02\x12\x12\n\ntop_left_y\x18\x02 \x01(\x02\x12\x16\n\x0e\x62ottom_right_x\x18\x03 \x01(\x02\x12\x16\n\x0e\x62ottom_right_y\x18\x04 \x01(\x02\"h\n\x0fObjectDetection\x12\x1f\n\x04\x62\x62ox\x18\x01 \x01(\x0b\x32\x11.model.masks.BBox\x12\x11\n\tcoco_mask\x18\x02 \x01(\x0c\x12\r\n\x05score\x18\x03 \x01(\x02\x12\x12\n\npred_class\x18\x04 \x01(\x05\"\\\n\x15\x46rameObjectDetections\x12\x14\n\x0c\x66rame_number\x18\x02 \x01(\x05\x12-\n\x07objects\x18\x03 \x03(\x0b\x32\x1c.model.masks.ObjectDetectionb\x06proto3'
+  serialized_pb=b'\n\x0btypes.proto\x12\x0bmodel.masks\"@\n\x04\x42\x42ox\x12\x0c\n\x04left\x18\x01 \x01(\x02\x12\x0b\n\x03top\x18\x02 \x01(\x02\x12\r\n\x05right\x18\x03 \x01(\x02\x12\x0e\n\x06\x62ottom\x18\x04 \x01(\x02\"h\n\x0fObjectDetection\x12\x1f\n\x04\x62\x62ox\x18\x01 \x01(\x0b\x32\x11.model.masks.BBox\x12\x11\n\tcoco_mask\x18\x02 \x01(\x0c\x12\r\n\x05score\x18\x03 \x01(\x02\x12\x12\n\npred_class\x18\x04 \x01(\x05\"\\\n\x15\x46rameObjectDetections\x12\x14\n\x0c\x66rame_number\x18\x02 \x01(\x05\x12-\n\x07objects\x18\x03 \x03(\x0b\x32\x1c.model.masks.ObjectDetectionb\x06proto3'
 )
 
 
@@ -34,28 +34,28 @@ _BBOX = _descriptor.Descriptor(
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='top_left_x', full_name='model.masks.BBox.top_left_x', index=0,
+      name='left', full_name='model.masks.BBox.left', index=0,
       number=1, type=2, cpp_type=6, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='top_left_y', full_name='model.masks.BBox.top_left_y', index=1,
+      name='top', full_name='model.masks.BBox.top', index=1,
       number=2, type=2, cpp_type=6, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='bottom_right_x', full_name='model.masks.BBox.bottom_right_x', index=2,
+      name='right', full_name='model.masks.BBox.right', index=2,
       number=3, type=2, cpp_type=6, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='bottom_right_y', full_name='model.masks.BBox.bottom_right_y', index=3,
+      name='bottom', full_name='model.masks.BBox.bottom', index=3,
       number=4, type=2, cpp_type=6, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
@@ -74,7 +74,7 @@ _BBOX = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=28,
-  serialized_end=122,
+  serialized_end=92,
 )
 
 
@@ -126,8 +126,8 @@ _OBJECTDETECTION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=124,
-  serialized_end=228,
+  serialized_start=94,
+  serialized_end=198,
 )
 
 
@@ -165,8 +165,8 @@ _FRAMEOBJECTDETECTIONS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=230,
-  serialized_end=322,
+  serialized_start=200,
+  serialized_end=292,
 )
 
 _OBJECTDETECTION.fields_by_name['bbox'].message_type = _BBOX

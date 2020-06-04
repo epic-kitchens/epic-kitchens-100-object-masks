@@ -11,26 +11,26 @@ __all__ = ["BBox", "FrameObjectDetections", "ObjectDetection"]
 
 @dataclass
 class BBox:
-    top_left_x: float
-    top_left_y: float
-    bottom_right_x: float
-    bottom_right_y: float
+    left: float
+    top: float
+    right: float
+    bottom: float
 
     @staticmethod
     def from_protobuf(bbox: pb.BBox) -> "BBox":
         return BBox(
-            top_left_x=bbox.top_left_x,
-            top_left_y=bbox.top_left_y,
-            bottom_right_x=bbox.bottom_right_x,
-            bottom_right_y=bbox.bottom_right_y,
+            left=bbox.left,
+            top=bbox.top,
+            right=bbox.right,
+            bottom=bbox.bottom,
         )
 
     def to_protobuf(self) -> pb.BBox:
         bbox = pb.BBox()
-        bbox.top_left_x = self.top_left_x
-        bbox.top_left_y = self.top_left_y
-        bbox.bottom_right_x = self.bottom_right_x
-        bbox.bottom_right_y = self.bottom_right_y
+        bbox.left = self.left
+        bbox.top = self.top
+        bbox.right = self.right
+        bbox.bottom = self.bottom
         assert bbox.IsInitialized()
         return bbox
 
