@@ -3,7 +3,7 @@ from pathlib import Path
 from typing import Dict, Iterator, List, Union
 import pandas as pd
 
-RAW_DETECTION_ROOT = '/media/viki/SCRATCH/epic2020_aggregated_masks'
+RAW_DETECTION_ROOT = '/media/viki/DATA/Jian/epic2020_aggregated_masks'
 DATA_PROCESSED = 'data/processed'
 
 
