@@ -82,4 +82,4 @@ autoapi_options = [
     'show-inheritance',
     'show-module-summary'
 ]
-autoapi_ignore = ['*/*pb2*', '*/_*', '*/coco.py']
+autoapi_ignore = ['*pb2*', '*_maskrcnn*', '*coco.py']
