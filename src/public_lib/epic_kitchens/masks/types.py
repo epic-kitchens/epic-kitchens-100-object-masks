@@ -4,7 +4,7 @@ import numpy as np
 from dataclasses import dataclass
 from pycocotools.mask import decode as coco_mask_decode
 
-from . import types_pb2 as pb
+import epic_kitchens.masks.types_pb2 as pb
 
 __all__ = ["BBox", "FrameObjectDetections", "ObjectDetection"]
 

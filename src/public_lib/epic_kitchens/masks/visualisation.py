@@ -3,9 +3,9 @@ from typing import List, Tuple
 
 import PIL.Image
 import numpy as np
-from .types import BBox, FrameObjectDetections
-from ._maskrcnn_visualise import display_instances, random_colors
-from .coco import class_names as coco_class_names
+from epic_kitchens.masks.types import BBox, FrameObjectDetections
+from epic_kitchens.masks._maskrcnn_visualise import display_instances, random_colors
+from epic_kitchens.masks.coco import class_names as coco_class_names
 
 
 def resize_mask(

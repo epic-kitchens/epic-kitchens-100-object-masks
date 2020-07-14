@@ -18,8 +18,6 @@ from matplotlib.patches import Polygon
 
 from skimage.measure import find_contours
 
-from . import _maskrcnn_utils as utils
-
 
 def display_instances(
     image: np.ndarray,
