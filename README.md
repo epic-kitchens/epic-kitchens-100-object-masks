@@ -19,6 +19,11 @@ Or to hack on it
 $ python setup.py develop
 ```
 
+## Downloads
+
+We provide the object masks for all frames in EPIC Kitchens. These are avaiable to
+download from [data.bris](https://data.bris.ac.uk/data/dataset/3l8eci2oqgst92n14w2yqi5ytu).
+
 ## Demo
 
 Check out our [demo notebook](./notebooks/demo.ipynb) showing how to load and visualise the masks
